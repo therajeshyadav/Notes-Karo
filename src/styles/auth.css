@@ -1,0 +1,266 @@
+/* Simple styles matching the image */
+
+.auth-container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.auth-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  background: #ffffff;
+  max-width: 400px;
+  width: 100%;
+}
+
+.auth-form-control {
+  border-radius: 4px;
+  border: 1px solid #dadce0;
+  padding: 12px 16px;
+  font-size: 14px;
+  background: #ffffff;
+  transition: border-color 0.2s;
+}
+
+.auth-form-control:focus {
+  border-color: #1a73e8;
+  box-shadow: none;
+  outline: none;
+}
+
+.auth-form-control.border-danger {
+  border-color: #d93025 !important;
+}
+
+.auth-form-control.border-primary {
+  border-color: #1a73e8 !important;
+}
+
+.auth-btn {
+  background: #1a73e8;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-weight: 500;
+  font-size: 14px;
+  color: white;
+  transition: background-color 0.2s;
+}
+
+.auth-btn:hover {
+  background: #1557b0;
+  color: white;
+}
+
+.auth-btn:disabled {
+  background: #94a3b8;
+  color: white;
+}
+
+.otp-input {
+  text-align: center;
+  font-size: 16px;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+
+.auth-title {
+  color: #202124;
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  color: #5f6368;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+.auth-label {
+  color: #202124;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.auth-link {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-link:hover {
+  color: #1557b0;
+  text-decoration: underline;
+}
+
+/* Dashboard styles - simple and clean */
+.dashboard-bg {
+  background-color: #fafbfc;
+  min-height: 100vh;
+}
+
+.dashboard-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #202124;
+}
+
+.welcome-title {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.dashboard-navbar {
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.simple-card {
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  margin-bottom: 16px;
+}
+
+.simple-btn {
+  background: #1a73e8;
+  border: none;
+  color: white;
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.simple-btn:hover {
+  background: #1557b0;
+  color: white;
+}
+
+.simple-input {
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.simple-input:focus {
+  border-color: #1a73e8;
+  box-shadow: none;
+  outline: none;
+}
+
+.note-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.note-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  background: #f1f3f4;
+}
+
+.delete-btn:hover {
+  background: #fce8e6;
+  color: #d93025;
+}
+
+.edit-btn:hover {
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+/* Logo circle */
+.logo-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.logo-inner {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  opacity: 0.9;
+}
+
+/* Welcome card */
+.welcome-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+  border-radius: 12px;
+}
+
+.welcome-card .card-body {
+  padding: 20px;
+}
+
+.welcome-card .welcome-title {
+  color: white;
+  font-weight: 500;
+}
+
+.welcome-card .text-muted {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 15px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 10px;
+  }
+  
+  .auth-card {
+    margin: 0 10px;
+  }
+  
+  .logo-circle {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .logo-inner {
+    width: 16px;
+    height: 16px;
+  }
+}
