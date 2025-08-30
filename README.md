@@ -45,35 +45,6 @@ A modern, full-stack note-taking application built with React, TypeScript, and N
 - **Delete Notes**: Remove notes you no longer need
 - **User Profile**: View your profile information in the welcome section
 ```
-
-## 📁 Project Structure
-
-```
-notekaro/
-├── src/
-│   ├── components/          # Reusable UI components
-│   │   └── Icons.tsx       # Custom icons
-│   ├── lib/                # Utility libraries
-│   │   ├── auth.ts         # Authentication functions
-│   │   └── notes.ts        # Notes API functions
-│   ├── pages/              # Page components
-│   │   ├── Dashboard.tsx   # Main dashboard
-│   │   ├── Login.tsx       # Login page
-│   │   └── Signup.tsx      # Signup page
-│   ├── styles/             # CSS styles
-│   │   └── auth.css        # Authentication and dashboard styles
-│   └── main.tsx            # Application entry point
-├── backend/
-│   ├── config/             # Configuration files
-│   ├── controller/         # Route controllers
-│   ├── middleware/         # Custom middleware
-│   ├── models/             # Database models
-│   ├── routes/             # API routes
-│   └── utils/              # Utility functions
-├── public/                 # Static assets
-└── package.json           # Dependencies and scripts
-```
-
 ## 🎨 UI Components
 
 - **Clean Dashboard**: Modern interface with gradient welcome card
