@@ -19,22 +19,14 @@ const Index = () => {
     <main className="min-h-screen bg-background">
       <Container fluid className="px-0">
         {/* Mobile Header */}
-        <div className="d-md-none auth-mobile-header text-center py-3">
-          <div className="mobile-auth-logo-section d-flex flex-column align-items-center">
-            <div className="mobile-auth-logo-circle mb-2">
-              <div className="mobile-auth-logo-inner"></div>
-            </div>
-            <h1
-              className="mobile-auth-app-name m-0"
-              style={{
-                fontSize: "1.5rem", 
-                wordBreak: "keep-all",
-              }}
-            >
-              NoteKaro
-            </h1>
-          </div>
-        </div>
+        <div className="d-md-none index-mobile-header">
+  <div className="index-mobile-logo-section">
+    <div className="index-mobile-logo-circle">
+      <div className="index-mobile-logo-inner"></div>
+    </div>
+    <h1 className="index-mobile-app-name">NoteKaro</h1>
+  </div>
+</div>
 
         <Row className="w-100 g-0 min-vh-100">
           {/* Left Section with light gradient */}
