@@ -209,16 +209,18 @@ const Signup = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group className="mb-3">
-                        <Form.Control
-                          type="date"
-                          name="dob"
-                          value={formData.dob}
-                          onChange={handleChange}
-                          required
-                          className={getFieldClassName('dob')}
-                        />
-                      </Form.Group>
+                     <Form.Floating className="mb-3">
+                     <Form.Control
+                     type="date"
+                     name="dob"
+                     value={formData.dob}
+                     onChange={handleChange}
+                     required
+                     placeholder="Date of Birth"  
+                    className={getFieldClassName('dob')}
+                    />
+                   <label htmlFor="dob">Date of Birth</label>
+                 </Form.Floating>
 
                       <Form.Group className="mb-4">
                         <Form.Control
