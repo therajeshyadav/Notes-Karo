@@ -2,12 +2,11 @@
   "name": "memo-muse-api",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "npx ts-node src/index.ts",
-    "build": "tsc",
-    "start": "node dist/src/index.js",
-    "start:ts": "tsc && node dist/src/index.js"
-  },
+ "scripts": {
+  "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+  "build": "tsc",
+  "start": "node dist/src/index.js"
+},
   "dependencies": {
     "arctic": "^3.7.0",
     "bcrypt": "^6.0.0",
