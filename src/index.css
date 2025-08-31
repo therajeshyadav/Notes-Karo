@@ -6,6 +6,13 @@
 All colors MUST be HSL.
 */
 
+@media (max-width: 767px) {
+  .index-left {
+    padding-top: 120px !important;
+  }
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;
