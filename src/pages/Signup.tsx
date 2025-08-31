@@ -201,7 +201,7 @@ const Signup = () => {
                         <Form.Control
                           type="text"
                           name="name"
-                          placeholder="Jonas Kahnwald"
+                          placeholder="Enter Your Name"
                           value={formData.name}
                           onChange={handleChange}
                           required
@@ -224,7 +224,7 @@ const Signup = () => {
                         <Form.Control
                           type="email"
                           name="email"
-                          placeholder="jonas.kahnwald@gmail.com"
+                          placeholder="Enter Your Email"
                           value={formData.email}
                           onChange={handleChange}
                           required
