@@ -132,12 +132,13 @@ Edit/Delete Notes → Manage existing notes
 Profile Dashboard → View your account info
 ```
 📸 Screenshots
-(Add your screenshots in docs/screenshots/)
+```
 
-Login Page
+![Signin Page](https://github.com/therajeshyadav/Notes-Karo/raw/main/Signinpage.jpg)
+![Signup Page](https://github.com/therajeshyadav/Notes-Karo/raw/main/Signup%20Page.jpg)
+![Dashboard Page](https://github.com/therajeshyadav/Notes-Karo/raw/main/DashBoard%20page.jpg)
 
-Dashboard
-
+```
 Note Detail / OTP (if added later)
 ```
 🌍 Live Demo
