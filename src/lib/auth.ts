@@ -53,10 +53,22 @@ export async function requestOtp(email: string, mode: "login" | "signup") {
       body: JSON.stringify({ email, mode }),
     });
     const data = await res.json();
-    if (!res.ok) return { success: false, error: data.error };
+    
+    if (!res.ok) {
+      // Return the specific error message from the backend
+      return { 
+        success: false, 
+        error: data.error || "Failed to send OTP" 
+      };
+    }
+    
     return { success: true };
-  } catch {
-    return { success: false, error: "Network error." };
+  } catch (error) {
+    console.error('Request OTP error:', error);
+    return { 
+      success: false, 
+      error: "Network error. Please check your connection and try again." 
+    };
   }
 }
 
@@ -69,12 +81,23 @@ export async function verifyOtp(email: string, otp: string, profile?: Omit<UserP
             body: JSON.stringify({ email, otp, name: profile?.name, dob: profile?.dob })
         });
         const data = await res.json();
-        if (!res.ok) return { success: false, error: data.error || "OTP verification failed." };
+        
+        if (!res.ok) {
+            return { 
+                success: false, 
+                error: data.error || "OTP verification failed. Please try again." 
+            };
+        }
+        
         localStorage.setItem(STORAGE_KEYS.token, data.token);
         localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(data.user));
         return { success: true, token: data.token, user: data.user };
-    } catch (e) {
-        return { success: false, error: "Network error." };
+    } catch (error) {
+        console.error('Verify OTP error:', error);
+        return { 
+            success: false, 
+            error: "Network error. Please check your connection and try again." 
+        };
     }
 }
 

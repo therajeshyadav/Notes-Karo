@@ -13,8 +13,10 @@ const Login = () => {
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -41,6 +43,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     
     if (!validateEmail()) {
       setError('Please enter a valid email address');
@@ -53,11 +56,14 @@ const Login = () => {
       const result = await requestOtp(email, 'login');
       if (result.success) {
         setShowOTP(true);
+        setError(''); // Clear any previous errors
+        setSuccess('OTP sent to your email successfully!');
       } else {
+        // Display the specific error message from backend
         setError(result.error || 'Failed to send OTP');
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      setError('Network error. Please check your connection and try again.');
     }
     setIsLoading(false);
   };
@@ -95,15 +101,19 @@ const Login = () => {
 
   const handleResendOTP = async () => {
     setError('');
+    setSuccess('');
     setIsLoading(true);
     
     try {
       const result = await requestOtp(email, 'login');
-      if (!result.success) {
+      if (result.success) {
+        setError(''); // Clear error
+        setSuccess('OTP resent successfully!');
+      } else {
         setError(result.error || 'Failed to resend OTP');
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      setError('Network error. Please check your connection and try again.');
     }
     setIsLoading(false);
   };
@@ -116,17 +126,49 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-container">
-      <Container>
-        <Row className="justify-content-center">
-          <Col md={6} lg={4}>
+    <>
+      {googleLoading && (
+        <div className="loading-overlay">
+          <div className="text-center">
+            <div className="loading-spinner"></div>
+            <div className="loading-text">Signing in with Google...</div>
+          </div>
+        </div>
+      )}
+      
+      <div className="auth-container">
+        {/* Mobile Header */}
+        <div className="auth-mobile-header">
+          <div className="mobile-auth-logo-section">
+            <div className="mobile-auth-logo-circle">
+              <div className="mobile-auth-logo-inner"></div>
+            </div>
+            <h1 className="mobile-auth-app-name">NoteKaro</h1>
+          </div>
+        </div>
+
+        {/* Left Section - Form */}
+        <div className="auth-left-section">
+          <div className="w-100" style={{ maxWidth: '400px' }}>
+            {/* Desktop Logo */}
+            <div className="auth-logo-section">
+              <div className="auth-logo-circle">
+                <div className="auth-logo-inner"></div>
+              </div>
+              <h1 className="auth-app-name">NoteKaro</h1>
+            </div>
+
             <Card className="auth-card">
-              <Card.Body className="p-4">
+              <Card.Body className="p-0">
                 <div className="text-center mb-4">
                   <h1 className="auth-title">Sign in</h1>
+                  <p className="text-muted" style={{ fontSize: '14px', marginTop: '8px' }}>
+                    Please sign in to continue to your account
+                  </p>
                 </div>
 
                 {error && <Alert variant="danger" className="mb-3">{error}</Alert>}
+                {success && <Alert variant="success" className="mb-3">{success}</Alert>}
 
                 <Form onSubmit={showOTP ? handleOTPVerification : handleSubmit}>
                   {!showOTP ? (
@@ -134,7 +176,7 @@ const Login = () => {
                       <Form.Group className="mb-3">
                         <Form.Control
                           type="email"
-                          placeholder="Enter your email"
+                          placeholder="jonas.kahnwald@gmail.com"
                           value={email}
                           onChange={handleEmailChange}
                           required
@@ -157,7 +199,7 @@ const Login = () => {
                         className="w-100 auth-btn mb-3"
                         disabled={isLoading}
                       >
-                        {isLoading ? 'Sending...' : 'Get OTP'}
+                        {isLoading ? 'Sending...' : 'Sign in'}
                       </Button>
                     </>
                   ) : (
@@ -171,7 +213,7 @@ const Login = () => {
                       <Form.Group className="mb-3">
                         <Form.Control
                           type="text"
-                          placeholder="Enter OTP"
+                          placeholder="OTP"
                           value={otp}
                           onChange={(e) => setOtp(e.target.value)}
                           required
@@ -201,19 +243,28 @@ const Login = () => {
                 </Form>
 
                 <div className="mt-3 d-flex justify-content-center">
-                  <GoogleLoginButton mode="login" onError={setError} />
+                  <GoogleLoginButton 
+                    mode="login" 
+                    onError={setError} 
+                    onLoading={setGoogleLoading}
+                  />
                 </div>
 
                 <div className="text-center mt-3">
-                  <span className="text-muted">Don't have an account? </span>
-                  <Link to="/signup" className="auth-link">Sign up</Link>
+                  <span className="text-muted">Need an account? </span>
+                  <Link to="/signup" className="auth-link">Create one</Link>
                 </div>
               </Card.Body>
             </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+          </div>
+        </div>
+
+        {/* Right Section - Blue Background */}
+        <div className="auth-right-section">
+          {/* Decorative content can be added here */}
+        </div>
+      </div>
+    </>
   );
 };
 

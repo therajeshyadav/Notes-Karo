@@ -7,18 +7,60 @@ import { sendOtpEmail } from "../utils/mailer";
 const JWT_SECRET = process.env.JWT_SECRET || "Braveman";
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+// 📌 Basic email domain validation
+const isValidEmailDomain = (email: string): boolean => {
+  const domain = email.split('@')[1];
+  if (!domain) return false;
+  
+  // Check for obvious typos in common domains
+  const commonDomains = [
+    'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 
+    'icloud.com', 'protonmail.com', 'aol.com', 'live.com'
+  ];
+  
+  // Check for common typos
+  const commonTypos = [
+    'gmail.co', 'gmail.cm', 'gmial.com', 'gmai.com',
+    'yahoo.co', 'yahoo.cm', 'yaho.com',
+    'hotmail.co', 'hotmail.cm', 'hotmial.com',
+    'outlook.co', 'outlook.cm'
+  ];
+  
+  if (commonTypos.includes(domain)) {
+    return false;
+  }
+  
+  // Basic domain format check
+  if (!/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(domain)) {
+    return false;
+  }
+  
+  // Check for invalid TLD patterns and common typos
+  if (domain.endsWith('.ing') || domain.endsWith('.co') || domain.endsWith('.cm') ||
+      domain.includes('sipnaengg.ac.ing') || domain.includes('.ac.ing')) {
+    return false;
+  }
+  
+  return true;
+};
+
 // 📌 Request OTP
 export const requestOtp = async (req: any, res: any) => {
   const { email, mode } = req.body;
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return res.status(400).json({ error: "Please provide a valid email." });
+    return res.status(400).json({ error: "Please provide a valid email address." });
+  }
+
+  // Check for obviously invalid email domains
+  if (!isValidEmailDomain(email)) {
+    return res.status(404).json({ error: "No account found for this email. Retry, or Sign up for NoteKaro." });
   }
 
   const existingUser = await User.findOne({ email });
 
   if (mode === "login" && !existingUser) {
-    return res.status(404).json({ error: "User not found. Please sign up first." });
+    return res.status(404).json({ error: "Email address not found. Please check your email or sign up first." });
   }
   if (mode === "signup" && existingUser) {
     return res.status(400).json({ error: "User already exists. Please log in." });
@@ -30,8 +72,24 @@ export const requestOtp = async (req: any, res: any) => {
   try {
     await sendOtpEmail(email, otp);
     return res.json({ success: true, message: "OTP sent to your email." });
-  } catch {
-    return res.status(500).json({ error: "Failed to send OTP email." });
+  } catch (error: any) {
+    console.error('Send OTP error:', error);
+    
+    // Remove OTP from store if email sending fails
+    OTP_STORE.delete(email);
+    
+    // Check if the error is related to invalid email address
+    if (error.message === 'EMAIL_NOT_FOUND' || 
+        error.message.includes('Invalid email') || 
+        error.message.includes('No such user') ||
+        error.message.includes('Recipient address rejected') ||
+        error.message.includes('User unknown') ||
+        error.message.includes('domain') ||
+        error.message.includes('couldn\'t be found')) {
+      return res.status(404).json({ error: "No account found for this email. Retry, or Sign up for NoteKaro." });
+    }
+    
+    return res.status(500).json({ error: "Failed to send OTP email. Please check if your email address is correct." });
   }
 };
 

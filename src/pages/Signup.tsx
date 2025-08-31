@@ -17,7 +17,10 @@ const Signup = () => {
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,6 +34,11 @@ const Signup = () => {
         ...fieldErrors,
         [name]: false
       });
+    }
+    
+    // Clear email error when user starts typing
+    if (name === 'email' && emailError) {
+      setEmailError('');
     }
   };
 
@@ -48,6 +56,8 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
+    setEmailError('');
     
     if (!validateForm()) {
       setError('Please fill all fields correctly');
@@ -60,11 +70,20 @@ const Signup = () => {
       const result = await requestOtp(formData.email, 'signup');
       if (result.success) {
         setShowOTP(true);
+        setError(''); // Clear any previous errors
+        setEmailError(''); // Clear email error
+        setSuccess('OTP sent to your email successfully!');
       } else {
-        setError(result.error || 'Failed to send OTP');
+        // Check if it's an email-specific error
+        if (result.error && result.error.includes('No account found for this email')) {
+          setEmailError(result.error);
+          setFieldErrors({ ...fieldErrors, email: true });
+        } else {
+          setError(result.error || 'Failed to send OTP');
+        }
       }
     } catch (err) {
-      setError('An error occurred');
+      setError('Network error. Please check your connection and try again.');
     }
     setIsLoading(false);
   };
@@ -99,38 +118,81 @@ const Signup = () => {
 
   const handleResendOTP = async () => {
     setError('');
+    setSuccess('');
+    setEmailError('');
     setIsLoading(true);
     
     try {
       const result = await requestOtp(formData.email, 'signup');
-      if (!result.success) {
-        setError(result.error || 'Failed to resend OTP');
+      if (result.success) {
+        setError(''); // Clear error
+        setEmailError(''); // Clear email error
+        setSuccess('OTP resent successfully!');
+      } else {
+        // Check if it's an email-specific error
+        if (result.error && result.error.includes('No account found for this email')) {
+          setEmailError(result.error);
+        } else {
+          setError(result.error || 'Failed to resend OTP');
+        }
       }
     } catch (err) {
-      setError('An error occurred');
+      setError('Network error. Please check your connection and try again.');
     }
     setIsLoading(false);
   };
 
   const getFieldClassName = (fieldName: string) => {
-    if (fieldErrors[fieldName]) {
-      return 'auth-form-control border-danger';
+    if (fieldErrors[fieldName] || (fieldName === 'email' && emailError)) {
+      return 'auth-form-control error';
     }
     return 'auth-form-control';
   };
 
   return (
-    <div className="auth-container">
-      <Container>
-        <Row className="justify-content-center">
-          <Col md={6} lg={4}>
+    <>
+      {googleLoading && (
+        <div className="loading-overlay">
+          <div className="text-center">
+            <div className="loading-spinner"></div>
+            <div className="loading-text">Signing up with Google...</div>
+          </div>
+        </div>
+      )}
+      
+      <div className="auth-container">
+        {/* Mobile Header */}
+        <div className="auth-mobile-header">
+          <div className="mobile-auth-logo-section">
+            <div className="mobile-auth-logo-circle">
+              <div className="mobile-auth-logo-inner"></div>
+            </div>
+            <h1 className="mobile-auth-app-name">NoteKaro</h1>
+          </div>
+        </div>
+
+        {/* Left Section - Form */}
+        <div className="auth-left-section">
+          <div className="w-100" style={{ maxWidth: '400px' }}>
+            {/* Desktop Logo */}
+            <div className="auth-logo-section">
+              <div className="auth-logo-circle">
+                <div className="auth-logo-inner"></div>
+              </div>
+              <h1 className="auth-app-name">NoteKaro</h1>
+            </div>
+
             <Card className="auth-card">
-              <Card.Body className="p-4">
+              <Card.Body className="p-0">
                 <div className="text-center mb-4">
                   <h1 className="auth-title">Sign up</h1>
+                  <p className="text-muted" style={{ fontSize: '14px', marginTop: '8px' }}>
+                    Sign up to enjoy the feature of NoteKaro
+                  </p>
                 </div>
 
                 {error && <Alert variant="danger" className="mb-3">{error}</Alert>}
+                {success && <Alert variant="success" className="mb-3">{success}</Alert>}
 
                 <Form onSubmit={showOTP ? handleOTPVerification : handleSubmit}>
                   {!showOTP ? (
@@ -139,7 +201,7 @@ const Signup = () => {
                         <Form.Control
                           type="text"
                           name="name"
-                          placeholder="Enter your name"
+                          placeholder="Jonas Kahnwald"
                           value={formData.name}
                           onChange={handleChange}
                           required
@@ -149,18 +211,6 @@ const Signup = () => {
 
                       <Form.Group className="mb-3">
                         <Form.Control
-                          type="email"
-                          name="email"
-                          placeholder="Enter your email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                          className={getFieldClassName('email')}
-                        />
-                      </Form.Group>
-
-                      <Form.Group className="mb-4">
-                        <Form.Control
                           type="date"
                           name="dob"
                           value={formData.dob}
@@ -168,6 +218,26 @@ const Signup = () => {
                           required
                           className={getFieldClassName('dob')}
                         />
+                      </Form.Group>
+
+                      <Form.Group className="mb-4">
+                        <Form.Control
+                          type="email"
+                          name="email"
+                          placeholder="jonas.kahnwald@gmail.com"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          className={getFieldClassName('email')}
+                        />
+                        {emailError && (
+                          <div className="email-error-container">
+                            <div className="email-error-message">
+                              <span className="email-error-icon">⚠</span>
+                              <span>{emailError}</span>
+                            </div>
+                          </div>
+                        )}
                       </Form.Group>
 
                       <Button
@@ -189,7 +259,7 @@ const Signup = () => {
                       <Form.Group className="mb-3">
                         <Form.Control
                           type="text"
-                          placeholder="Enter OTP"
+                          placeholder="OTP"
                           value={otp}
                           onChange={(e) => setOtp(e.target.value)}
                           required
@@ -219,7 +289,11 @@ const Signup = () => {
                 </Form>
 
                 <div className="mt-3 d-flex justify-content-center">
-                  <GoogleLoginButton mode="signup" onError={setError} />
+                  <GoogleLoginButton 
+                    mode="signup" 
+                    onError={setError} 
+                    onLoading={setGoogleLoading}
+                  />
                 </div>
 
                 <div className="text-center mt-3">
@@ -228,10 +302,15 @@ const Signup = () => {
                 </div>
               </Card.Body>
             </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+          </div>
+        </div>
+
+        {/* Right Section - Blue Background */}
+        <div className="auth-right-section">
+          {/* Decorative content can be added here */}
+        </div>
+      </div>
+    </>
   );
 };
 

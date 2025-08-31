@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 interface GoogleLoginButtonProps {
   mode: "login" | "signup";
   onError?: (error: string) => void;
+  onLoading?: (loading: boolean) => void;
 }
 
-const GoogleLoginButton = ({ mode, onError }: GoogleLoginButtonProps) => {
+const GoogleLoginButton = ({ mode, onError, onLoading }: GoogleLoginButtonProps) => {
   const navigate = useNavigate();
   const buttonRef = useRef<HTMLDivElement>(null);
 
@@ -57,6 +58,7 @@ const GoogleLoginButton = ({ mode, onError }: GoogleLoginButtonProps) => {
 
   const handleCredentialResponse = async (response: any) => {
     try {
+      if (onLoading) onLoading(true);
       console.log("Encoded JWT ID token: " + response.credential);
 
       const endpoint = mode === "login" ? "/auth/google/login" : "/auth/google/signup";
@@ -75,12 +77,15 @@ const GoogleLoginButton = ({ mode, onError }: GoogleLoginButtonProps) => {
         } else {
           console.error(`Google ${mode} error:`, errorMessage);
         }
+        if (onLoading) onLoading(false);
         return;
       }
 
       console.log(`User ${mode} successful:`, data);
       localStorage.setItem("auth_token", data.token);
       localStorage.setItem("auth_user", JSON.stringify(data.user));
+      
+      // Keep loading state while navigating
       navigate("/dashboard");
     } catch (err) {
       const errorMessage = `Google ${mode} failed`;
@@ -89,6 +94,7 @@ const GoogleLoginButton = ({ mode, onError }: GoogleLoginButtonProps) => {
       } else {
         console.error(`Google ${mode} error:`, err);
       }
+      if (onLoading) onLoading(false);
     }
   };
 
