@@ -134,9 +134,9 @@ Profile Dashboard → View your account info
 📸 Screenshots
 ```
 
-![Signin Page](https://github.com/therajeshyadav/Notes-Karo/raw/main/Signinpage.jpg)
-![Signup Page](https://github.com/therajeshyadav/Notes-Karo/raw/main/Signup%20Page.jpg)
-![Dashboard Page](https://github.com/therajeshyadav/Notes-Karo/raw/main/DashBoard%20page.jpg)
+![Signin Page](https://github.com/therajeshyadav/Notes-Karo/blob/591153d2eaf152f870bf18b783bfd93625b3de13/Signinpage.jpg)
+![Signup Page](https://github.com/therajeshyadav/Notes-Karo/blob/591153d2eaf152f870bf18b783bfd93625b3de13/Signup%20Page.jpg)
+![Dashboard Page](https://github.com/therajeshyadav/Notes-Karo/blob/591153d2eaf152f870bf18b783bfd93625b3de13/DashBoard%20page.jpg)
 
 ```
 Note Detail / OTP (if added later)
