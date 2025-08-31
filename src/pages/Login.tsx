@@ -176,7 +176,7 @@ const Login = () => {
                       <Form.Group className="mb-3">
                         <Form.Control
                           type="email"
-                          placeholder="jonas.kahnwald@gmail.com"
+                          placeholder="Enter Your Email"
                           value={email}
                           onChange={handleEmailChange}
                           required
