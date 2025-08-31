@@ -7,7 +7,7 @@ import { sendOtpEmail } from "../utils/mailer";
 const JWT_SECRET = process.env.JWT_SECRET || "Braveman";
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-// 📌 Basic email domain validation
+//  Basic email domain validation
 const isValidEmailDomain = (email: string): boolean => {
   const domain = email.split('@')[1];
   if (!domain) return false;
@@ -44,7 +44,7 @@ const isValidEmailDomain = (email: string): boolean => {
   return true;
 };
 
-// 📌 Request OTP
+//  Request OTP
 export const requestOtp = async (req: any, res: any) => {
   const { email, mode } = req.body;
 
@@ -93,7 +93,7 @@ export const requestOtp = async (req: any, res: any) => {
   }
 };
 
-// 📌 Verify OTP
+//  Verify OTP
 export const verifyOtp = async (req: any, res: any) => {
   const { email, otp, name, dob } = req.body;
   const expected = OTP_STORE.get(email);
@@ -117,7 +117,7 @@ export const verifyOtp = async (req: any, res: any) => {
   res.json({ token, user });
 };
 
-// 📌 Google Signup
+//  Google Signup
 export const googleSignup = async (req: any, res: any) => {
   const { credential } = req.body;
   const ticket = await googleClient.verifyIdToken({ idToken: credential, audience: process.env.GOOGLE_CLIENT_ID });
@@ -141,7 +141,7 @@ export const googleSignup = async (req: any, res: any) => {
   res.json({ success: true, token, user: newUser });
 };
 
-// 📌 Google Login
+//  Google Login
 export const googleLogin = async (req: any, res: any) => {
   const { credential } = req.body;
   const ticket = await googleClient.verifyIdToken({ idToken: credential, audience: process.env.GOOGLE_CLIENT_ID });
@@ -163,7 +163,7 @@ export const googleLogin = async (req: any, res: any) => {
   res.json({ success: true, token, user });
 };
 
-// 📌 Get logged-in user
+//  Get logged-in user
 export const me = (req: any, res: any) => {
   const auth = req.headers.authorization || "";
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : null;
