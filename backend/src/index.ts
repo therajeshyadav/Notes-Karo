@@ -16,8 +16,11 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3002",
   "http://localhost:5173",
-  process.env.FRONTEND_URL || "https://note-karo-zeta.vercel.app" 
+  "https://note-karo-git-main-rajesh-s-projects-187b6c1a.vercel.app",
+  "https://note-karo-2tq1mf6ha-rajesh-s-projects-187b6c1a.vercel.app",
+  process.env.FRONTEND_URL || ""
 ];
+
 
 
 app.use(
